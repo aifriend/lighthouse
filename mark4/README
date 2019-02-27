@@ -1,0 +1,12 @@
+Nombre: IronBot v4.13
+Autor: Ibai Roman
+Licencia: GPLv3
+
+Robot basado en recolección de energia y generación de triangulos pequeños.
+
+Requisitos:
+	Python v2.6.x o v2.7.x
+		# apt-get install python2.7
+
+Uso:
+$ python2.7 mark4/ironbot.py
