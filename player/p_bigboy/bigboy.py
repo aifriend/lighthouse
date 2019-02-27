@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-#     Copyright 2017 Ibai Roman
+#     Copyright 2018 Jose Lopez
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@ import json
 import random
 
 
-class IronBot(object):
+class BigBoy(object):
     """
-    IronBot mk4
+    BigBoy player bot
     """
-    NAME = "IronBot_mk4"
+    NAME = "BigBoy"
     MAX_INT = 1e40
 
     def run(self):
@@ -59,6 +59,7 @@ class IronBot(object):
     def log(self, message, *args):
         """
         Send a message to stderr
+
         :param message:
         :param args:
         :return:
@@ -77,14 +78,14 @@ class IronBot(object):
                   for row in world_map]
         lh_map[lh[1]][lh[0]] = 0
         dist = 1
-        points = IronBot.__get_possible_points(lh, lh_map)
+        points = BigBoy.__get_possible_points(lh, lh_map)
         while len(points):
             next_points = []
             for x, y in points:
                 lh_map[y][x] = dist
 
             for x, y in points:
-                cur_points = IronBot.__get_possible_points((x, y), lh_map)
+                cur_points = BigBoy.__get_possible_points((x, y), lh_map)
                 next_points.extend(cur_points)
             points = list(set(next_points))
             dist += 1
@@ -188,7 +189,7 @@ class IronBot(object):
         """
 
         for conn in possible_connections:
-            if IronBot.__closes_tri(lh_states, my_pos, conn):
+            if BigBoy.__closes_tri(lh_states, my_pos, conn):
                 self.log("CONNECT TRI: %s", str(conn))
                 return conn
         conn = random.choice(possible_connections)
@@ -229,7 +230,7 @@ class IronBot(object):
 
         possible_moves = self.__get_possible_moves(state["position"])
         if state["energy"] < 500:
-            move, energy_gain = IronBot.__harvest_movement(
+            move, energy_gain = BigBoy.__harvest_movement(
                 state["view"], possible_moves)
             if energy_gain > 10:
                 self.log("MOVE TO HARVEST: %s", str(move))
@@ -339,8 +340,8 @@ class IronBot(object):
                     lh_states[dest]["have_key"] and
                     list(orig) not in lh_states[dest]["connections"] and
                     lh_states[dest]["owner"] == self.player_num and
-                    not IronBot.__are_lhs(orig, dest, lh_states) and
-                    not IronBot.__are_connections(lh_states, orig, dest)):
+                    not BigBoy.__are_lhs(orig, dest, lh_states) and
+                    not BigBoy.__are_connections(lh_states, orig, dest)):
                 possible_connections.append(dest)
         return possible_connections
 
@@ -358,7 +359,7 @@ class IronBot(object):
         for lh in lh_states:
             if (x0 <= lh[0] <= x1 and y0 <= lh[1] <= y1 and
                     lh not in (orig, dest) and
-                    IronBot.colinear(orig, dest, lh)):
+                    BigBoy.colinear(orig, dest, lh)):
                 return True
         return False
 
@@ -373,7 +374,7 @@ class IronBot(object):
         """
         for lh in lh_states:
             for c in lh_states[lh]["connections"]:
-                if IronBot.intersect(
+                if BigBoy.intersect(
                         (lh_states[lh]["position"], tuple(c)),
                         (orig, dest)
                     ):
@@ -439,7 +440,7 @@ class IronBot(object):
         :param c:
         :return:
         """
-        return IronBot.orient2d(a, b, c) == 0
+        return BigBoy.orient2d(a, b, c) == 0
 
     @staticmethod
     def intersect(j, k):
@@ -452,12 +453,13 @@ class IronBot(object):
         j1, j2 = j
         k1, k2 = k
         return (
-            IronBot.orient2d(k1, k2, j1) *
-            IronBot.orient2d(k1, k2, j2) < 0 and
-            IronBot.orient2d(j1, j2, k1) *
-            IronBot.orient2d(j1, j2, k2) < 0
+            BigBoy.orient2d(k1, k2, j1) *
+            BigBoy.orient2d(k1, k2, j2) < 0 and
+            BigBoy.orient2d(j1, j2, k1) *
+            BigBoy.orient2d(j1, j2, k2) < 0
         )
 
+
 if __name__ == "__main__":
-    bot = IronBot()
+    bot = BigBoy()
     bot.run()

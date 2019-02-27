@@ -1,8 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import random, sys
-import interface
+import random
+
+from player.p_random import interface
+
 
 class RandBot(interface.Bot):
     """Bot que juega aleatoriamente."""
@@ -13,7 +15,7 @@ class RandBot(interface.Bot):
         Debe devolver una acción (jugada)."""
         cx, cy = state["position"]
         lighthouses = dict((tuple(lh["position"]), lh)
-                            for lh in state["lighthouses"])
+                           for lh in state["lighthouses"])
 
         # Si estamos en un faro...
         if (cx, cy) in self.lighthouses:
@@ -28,9 +30,9 @@ class RandBot(interface.Bot):
                         # No conectar si no controlamos el destino
                         # Nota: no comprobamos si la conexión se cruza.
                         if (dest != (cx, cy) and
-                            lighthouses[dest]["have_key"] and
-                            [cx, cy] not in lighthouses[dest]["connections"] and
-                            lighthouses[dest]["owner"] == self.player_num):
+                                lighthouses[dest]["have_key"] and
+                                [cx, cy] not in lighthouses[dest]["connections"] and
+                                lighthouses[dest]["owner"] == self.player_num):
                             possible_connections.append(dest)
 
                     if possible_connections:
@@ -42,11 +44,12 @@ class RandBot(interface.Bot):
                 return self.attack(energy)
 
         # Mover aleatoriamente
-        moves = ((-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1))
+        moves = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
         # Determinar movimientos válidos
-        moves = [(x,y) for x,y in moves if self.map[cy+y][cx+x]]
+        moves = [(x, y) for x, y in moves if self.map[cy + y][cx + x]]
         move = random.choice(moves)
         return self.move(*move)
+
 
 if __name__ == "__main__":
     iface = interface.Interface(RandBot)

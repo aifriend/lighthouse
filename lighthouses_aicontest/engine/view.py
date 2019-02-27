@@ -108,3 +108,9 @@ class GameView(object):
                         (x1 * CELL + CELL/2, y1 * CELL + CELL/2), color)
         self.screen.blit(self.arena, (0,0))
         pygame.display.flip()
+
+    def closeEvent(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # This would be a quit event.
+                return True  # So the user can close the program
+        return False

@@ -1,0 +1,12 @@
+Name: BigBoy v1.0
+Author: Jose Lopez
+Licence: GPLv3
+
+Robot based on energy collection and generation of small triangles.
+
+Requirements:
+	Python v2.6.x o v2.7.x
+		# apt-get install python2.7
+
+Uso:
+$ python2.7 interface/bigboy.py

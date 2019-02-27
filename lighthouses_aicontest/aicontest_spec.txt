@@ -84,11 +84,9 @@ Conexiones
 
 Los jugadores podrán conectar parejas de faros mediante haces láser cuando ambos
 están bajo su control. Sin embargo, está prohibido lanzar un haz entre dos faros
-que cruce un haz ya existente (tanto del mismo jugador como del enemigo). Si se
-hiciera, la densidad de flujo lumínico en la intersección sería tan alta que se
-iniciaría una fusión no controlada de la atmósfera y por lo tanto una catástrofe
-global. También está prohibido conectar dos faros si la conexión pasaría
-exactamente por un tercer faro.
+que cruce un haz ya existente (tanto del mismo jugador como del contrario).
+También está prohibido conectar dos faros si la conexión pasa exactamente por un
+tercer faro.
 
 Para realizar una conexión entre dos faros se debe estar en la casilla de uno
 de ellos y tener la clave del otro faro. Para obtener la clave de un faro se
@@ -180,7 +178,7 @@ Cada jugador tendrá una puntuación (0 al comienzo de la partida), que es un
 número entero. Se obtendrán puntos al término de cada ronda de la siguiente
 forma:
 
-- 2 puntos por cada torre bajo control del jugador.
+- 2 puntos por cada faro bajo control del jugador.
 - 2 puntos por cada pareja de faros conectados bajo el control del jugador.
 - Por cada 3 faros conectados entre sí bajo su control (formando un triángulo):
   - 1 punto por cada casilla cuyo centro esté dentro de dicho triángulo.
@@ -219,7 +217,7 @@ Los bots se comunicarán por stdio/stdout. El protocolo consiste en mensajes
 JSON codificados en una sola línea, terminados por \n (newline). El motor del
 juego siempre es el responsable de iniciar las comunicaciones, y el bot
 contestará con su respuesta. Los bots pueden mostrar mensajes de debug por
-stderr, pero DEBEN prefijarlos por su nombre entre [] para su clara
+stderr, pero DEBEN prefijarlos por su nombre entre [] para una clara
 identificación:
 
 [TroloBot] mensaje...
@@ -246,7 +244,7 @@ El motor envía el siguiente mensaje (ejemplo):
 	]
 }
 
-Este mensaje indica que el bot es el primer jugador (jugador 0) de 2 en total
+Este mensaje indica que el bot es el primer jugador (jugador 0) de un total de 2
 (el otro sería el jugador 1), y describe el siguiente mapa de 5x5:
 
 v----- casilla (0, 4)
@@ -369,6 +367,7 @@ visitó el faro 30 para obtener su clave, y luego el 50 para conectarlo al
 
 El bot debe contestar con uno de los siguientes mensajes (tiempo máximo por
 turno: 100ms desde que se recibe el estado hasta que se contesta):
+
 {
 	"command": "pass"
 }
@@ -408,7 +407,7 @@ Atacar con energía 0 es equivalente a pasar el turno.
 }
 Conectar el faro de la posición actual al faro (1, 1). El jugador debe poseer
 la clave del faro de destino, y ambos deben estar controlados por el jugador.
-La conexión no debe existir ya, ni cruzarse contra ninguna otra conexión
+La conexión no debe existir ya, ni cruzarse con ninguna otra conexión
 existente, ni pasar por el centro de un tercer faro (la conexión se puede
 solapar con la casilla de un tercer faro siempre y cuando no lo haga por su
 centro exacto).

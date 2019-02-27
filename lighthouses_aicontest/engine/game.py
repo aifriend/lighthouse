@@ -19,6 +19,8 @@ view = view.GameView(game)
 
 round = 0
 while True:
+    if view.closeEvent():
+        break
     game.pre_round()
     view.update()
     for actor in actors:

@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys, json
+import json
+import sys
+
 
 # ==============================================================================
 # ROBOT
@@ -9,6 +11,7 @@ import sys, json
 # ==============================================================================
 
 class Bot(object):
+
     """Bot base. Este bot no hace nada (pasa todos los turnos)."""
     NAME = "NullBot"
 
@@ -94,6 +97,7 @@ class Bot(object):
             "destination": destination
         }
 
+
 # ==============================================================================
 # Interfaz
 # ==============================================================================
@@ -126,6 +130,7 @@ class Interface(object):
                 self.bot.success()
             else:
                 self.bot.error(status["message"], move)
+
 
 if __name__ == "__main__":
     iface = Interface(Bot)

@@ -1,0 +1,13 @@
+Name: RandBot v0.1
+Author: marcan <marcan@euskalencounter.org>
+Position: Control de Servidores
+Licence: Dominio Público
+
+Example robot that plays randomly
+
+Requirements:
+	Python v2.6.x o v2.7.x
+		# apt-get install python2.7
+
+Uso:
+$ python2.7 player/p_random/randbot.py
