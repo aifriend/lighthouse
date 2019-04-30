@@ -25,7 +25,7 @@ class BotPlayer(object):
         try:
             self.p.stdin.write(line + "\n")
             self.p.stdin.flush()
-        except:
+        except Exception as exc:
             raise CommError("Error sending data")
 
     def _recv(self, soft_timeout, hard_timeout):
