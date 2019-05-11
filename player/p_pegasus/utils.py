@@ -3,10 +3,8 @@
 
 import random
 
-from player.p_pegasus import geom
 
-
-class Tool:
+class Utils:
     def __init__(self):
         pass
 
@@ -45,26 +43,9 @@ class Tool:
         for lh in lh_states:
             if (x0 <= lh[0] <= x1 and y0 <= lh[1] <= y1 and
                     lh not in (orig, dest) and
-                    geom.colinear(orig, dest, lh)):
+                    Utils._colinear(orig, dest, lh)):
                 return True
         return False
-
-    @staticmethod
-    def intersect(j, k):
-        """
-
-        :param j:
-        :param k:
-        :return:
-        """
-        j1, j2 = j
-        k1, k2 = k
-        return (
-                geom.orient2d(k1, k2, j1) *
-                geom.orient2d(k1, k2, j2) < 0 and
-                geom.orient2d(j1, j2, k1) *
-                geom.orient2d(j1, j2, k2) < 0
-        )
 
     @staticmethod
     def has_connections(lh_states, orig, dest):
@@ -77,7 +58,7 @@ class Tool:
         """
         for lh in lh_states:
             for c in lh_states[lh]["connections"]:
-                if Tool.intersect(
+                if Utils._intersect(
                         (lh_states[lh]["position"], tuple(c)),
                         (orig, dest)
                 ):
@@ -132,3 +113,43 @@ class Tool:
         move = max(energy_on_move, key=energy_on_move.get)
 
         return move, energy_on_move[move]
+
+    @staticmethod
+    def _orient2d(a, b, c):
+        """
+
+        :param a:
+        :param b:
+        :param c:
+        :return:
+        """
+        return (b[0] - a[0]) * (c[1] - a[1]) - \
+            (c[0] - a[0]) * (b[1] - a[1])
+
+    @staticmethod
+    def _colinear(a, b, c):
+        """
+
+        :param a:
+        :param b:
+        :param c:
+        :return:
+        """
+        return Utils._orient2d(a, b, c) == 0
+
+    @staticmethod
+    def _intersect(j, k):
+        """
+
+        :param j:
+        :param k:
+        :return:
+        """
+        j1, j2 = j
+        k1, k2 = k
+        return (
+                Utils._orient2d(k1, k2, j1) *
+                Utils._orient2d(k1, k2, j2) < 0 and
+                Utils._orient2d(j1, j2, k1) *
+                Utils._orient2d(j1, j2, k2) < 0
+        )

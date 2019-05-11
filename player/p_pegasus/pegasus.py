@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import random
-
-from player.p_pegasus import interface, tool as helper
+import interface
+from utils import Utils
 
 
 class Pegasus(interface.Bot):
@@ -30,14 +30,14 @@ class Pegasus(interface.Bot):
         lh_map = [[-1 if pos else self.MAX_INT for pos in row] for row in world_map]
         lh_map[lh[1]][lh[0]] = 0
         dist = 1
-        points = helper.Tool.get_possible_points(lh, lh_map)
+        points = Utils.get_possible_points(lh, lh_map)
         while len(points):
             next_points = []
             for x, y in points:
                 lh_map[y][x] = dist
 
             for x, y in points:
-                cur_points = helper.Tool.get_possible_points((x, y), lh_map)
+                cur_points = Utils.get_possible_points((x, y), lh_map)
                 next_points.extend(cur_points)
             points = list(set(next_points))
             dist += 1
@@ -50,9 +50,10 @@ class Pegasus(interface.Bot):
 
     def play(self, state):
         """
+        Play as it was called by turn
 
-        :param state:
-        :return:
+        :param: state
+        :return: action (pass, move, attack, connect)
         """
         lh_states = self._get_lh_states(state)
         my_pos = tuple(state["position"])
@@ -60,12 +61,10 @@ class Pegasus(interface.Bot):
         if my_pos in lh_states:
             # Connect
             if lh_states[my_pos]["owner"] == self.player_num:
-                possible_connections = self._get_possible_connections(
-                    lh_states, my_pos)
+                possible_connections = self._get_possible_connections(lh_states, my_pos)
                 if possible_connections:
                     conn = self._decide_connection(
                         possible_connections, my_pos, lh_states)
-
                     return {
                         "command": "connect",
                         "destination": conn
@@ -86,6 +85,11 @@ class Pegasus(interface.Bot):
             "command": "move",
             "x": move[0],
             "y": move[1]
+        }
+
+        # Pass
+        return {
+            "command": "pass",
         }
 
     def _get_lh_states(self, state):
@@ -128,8 +132,8 @@ class Pegasus(interface.Bot):
                     lh_states[dest]["have_key"] and
                     list(orig) not in lh_states[dest]["connections"] and
                     lh_states[dest]["owner"] == self.player_num and
-                    not helper.Tool.has_lhs(orig, dest, lh_states) and
-                    not helper.Tool.has_connections(lh_states, orig, dest)):
+                    not Utils.has_lhs(orig, dest, lh_states) and
+                    not Utils.has_connections(lh_states, orig, dest)):
                 possible_connections.append(dest)
         return possible_connections
 
@@ -143,7 +147,7 @@ class Pegasus(interface.Bot):
         """
 
         for conn in possible_connections:
-            if helper.Tool.closes_tri(lh_states, my_pos, conn):
+            if Utils.closes_tri(lh_states, my_pos, conn):
                 self.log("CONNECT TRI: %s", str(conn))
                 return conn
         conn = random.choice(possible_connections)
@@ -192,7 +196,7 @@ class Pegasus(interface.Bot):
                     for orig_conn in possible_connections:
                         for dest_conn in lh_states[orig_conn]["connections"]:
                             if tuple(dest_conn) in possible_connections:
-                                tri_size = helper.Tool.closes_tri(
+                                tri_size = Utils.closes_tri(
                                     lh_states, dest_conn, orig_conn, size=True)
                                 lh_points += 1000000 * tri_size
 
@@ -231,7 +235,7 @@ class Pegasus(interface.Bot):
 
         possible_moves = self._get_possible_moves(state["position"])
         if state["energy"] < 500:
-            move, energy_gain = helper.Tool.harvest_movement(
+            move, energy_gain = Utils.harvest_movement(
                 state["view"], possible_moves)
             if energy_gain > 10:
                 self.log("MOVE TO HARVEST: %s", str(move))
