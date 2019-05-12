@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import random
-import interface
+from interface import Interface
+from bot import Bot
 from utils import Utils
 
 
-class Pegasus(interface.Bot):
+class Pegasus(Bot):
     """
     Pegasus player bot
     """
@@ -250,5 +251,5 @@ class Pegasus(interface.Bot):
 
 
 if __name__ == "__main__":
-    iface = interface.Interface(Pegasus)
+    iface = Interface(Pegasus)
     iface.run()

@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import random
-
-from player.p_random import interface
+import interface
 
 
 class RandBot(interface.Bot):
@@ -45,6 +44,7 @@ class RandBot(interface.Bot):
 
         # Mover aleatoriamente
         moves = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
+
         # Determinar movimientos válidos
         moves = [(x, y) for x, y in moves if self.map[cy + y][cx + x]]
         move = random.choice(moves)
