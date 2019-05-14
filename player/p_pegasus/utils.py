@@ -105,7 +105,8 @@ class Utils:
             c_x = move[1] + view_center[1]
             c_y = move[0] + view_center[0]
             new_center = view[c_x][c_y] * 8 + \
-                         (view[c_x - 1][c_y - 1] + view[c_x - 1][c_y] + view[c_x - 1][c_y + 1] + view[c_x + 1][c_y - 1] +
+                         (view[c_x - 1][c_y - 1] + view[c_x - 1][c_y] + view[c_x - 1][c_y + 1] + view[c_x + 1][
+                             c_y - 1] +
                           view[c_x + 1][c_y] + view[c_x + 1][c_y + 1] +
                           view[c_x][c_y + 1] + view[c_x][c_y - 1]) * 1
             energy_on_move[move] = new_center + random.uniform(0.0, 0.1)
@@ -124,7 +125,7 @@ class Utils:
         :return:
         """
         return (b[0] - a[0]) * (c[1] - a[1]) - \
-            (c[0] - a[0]) * (b[1] - a[1])
+               (c[0] - a[0]) * (b[1] - a[1])
 
     @staticmethod
     def _colinear(a, b, c):

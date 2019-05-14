@@ -16,9 +16,9 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import json
 import random
+import sys
 
 
 class BigBoy(object):
@@ -64,7 +64,7 @@ class BigBoy(object):
         :param args:
         :return:
         """
-        print >>sys.stderr, "[%s] %s" % (self.NAME, (message % args))
+        print >> sys.stderr, "[%s] %s" % (self.NAME, (message % args))
 
     def __get_lh_dist_map(self, lh, world_map):
         """
@@ -112,9 +112,9 @@ class BigBoy(object):
         # Possible movements
         cx, cy = pos
 
-        points = [(cx+x, cy+y)
+        points = [(cx + x, cy + y)
                   for x, y in moves
-                  if lh_map[cy+y][cx+x] == -1]
+                  if lh_map[cy + y][cx + x] == -1]
         return points
 
     def play(self, state):
@@ -141,7 +141,7 @@ class BigBoy(object):
                     }
 
             # Attack
-            if state["energy"] >= lh_states[my_pos]["energy"]: # 100
+            if state["energy"] >= lh_states[my_pos]["energy"]:  # 100
                 energy = state["energy"]
                 self.log("ATTACK TO: %s", str(my_pos))
                 return {
@@ -257,7 +257,7 @@ class BigBoy(object):
         # Check possible movements
         cx, cy = pos
 
-        moves = [(x, y) for x, y in moves if self.map[cy+y][cx+x]]
+        moves = [(x, y) for x, y in moves if self.map[cy + y][cx + x]]
         return moves
 
     @staticmethod
@@ -275,10 +275,10 @@ class BigBoy(object):
         for move in possible_moves:
             c_x = move[1] + view_center[1]
             c_y = move[0] + view_center[0]
-            new_center = view[c_x][c_y] * 8 +  \
-                (view[c_x - 1][c_y - 1] + view[c_x - 1][c_y] + view[c_x - 1][c_y + 1] + \
-                view[c_x + 1][c_y - 1] + view[c_x + 1][c_y] + view[c_x + 1][c_y + 1] + \
-                view[c_x][c_y + 1] + view[c_x][c_y - 1]) * 1
+            new_center = view[c_x][c_y] * 8 + \
+                         (view[c_x - 1][c_y - 1] + view[c_x - 1][c_y] + view[c_x - 1][c_y + 1] + \
+                          view[c_x + 1][c_y - 1] + view[c_x + 1][c_y] + view[c_x + 1][c_y + 1] + \
+                          view[c_x][c_y + 1] + view[c_x][c_y - 1]) * 1
             energy_on_move[move] = new_center + random.uniform(0.0, 0.1)
 
         move = max(energy_on_move, key=energy_on_move.get)
@@ -377,7 +377,7 @@ class BigBoy(object):
                 if BigBoy.intersect(
                         (lh_states[lh]["position"], tuple(c)),
                         (orig, dest)
-                    ):
+                ):
                     return True
         return False
 
@@ -429,7 +429,7 @@ class BigBoy(object):
         :return:
         """
         return (b[0] - a[0]) * (c[1] - a[1]) - \
-            (c[0] - a[0]) * (b[1] - a[1])
+               (c[0] - a[0]) * (b[1] - a[1])
 
     @staticmethod
     def colinear(a, b, c):
@@ -453,10 +453,10 @@ class BigBoy(object):
         j1, j2 = j
         k1, k2 = k
         return (
-            BigBoy.orient2d(k1, k2, j1) *
-            BigBoy.orient2d(k1, k2, j2) < 0 and
-            BigBoy.orient2d(j1, j2, k1) *
-            BigBoy.orient2d(j1, j2, k2) < 0
+                BigBoy.orient2d(k1, k2, j1) *
+                BigBoy.orient2d(k1, k2, j2) < 0 and
+                BigBoy.orient2d(j1, j2, k1) *
+                BigBoy.orient2d(j1, j2, k2) < 0
         )
 
 

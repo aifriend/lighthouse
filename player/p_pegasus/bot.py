@@ -1,5 +1,7 @@
-#!/usr/bin/python
+#!/usr/local/bin/python3.7
 # -*- coding: utf-8 -*-
+
+from __future__ import print_function
 
 import sys
 
@@ -10,7 +12,6 @@ import sys
 # ==============================================================================
 
 class Bot(object):
-
     """Bot base. Este bot no hace nada (pasa todos los turnos)."""
     NAME = "NullBot"
 
@@ -51,7 +52,7 @@ class Bot(object):
 
     def log(self, message, *args):
         """Mostrar mensaje de registro por stderr"""
-        print >>sys.stderr, "[%s] %s" % (self.NAME, (message % args))
+        print("[%s] %s" % (self.NAME, (message % args)), file=sys.stderr)
 
     # ==========================================================================
     # Jugadas posibles
@@ -95,5 +96,3 @@ class Bot(object):
             "command": "connect",
             "destination": destination
         }
-
-

@@ -11,7 +11,6 @@ import sys
 # ==============================================================================
 
 class Bot(object):
-
     """Bot base. Este bot no hace nada (pasa todos los turnos)."""
     NAME = "NullBot"
 
@@ -52,7 +51,7 @@ class Bot(object):
 
     def log(self, message, *args):
         """Mostrar mensaje de registro por stderr"""
-        print >>sys.stderr, "[%s] %s" % (self.NAME, (message % args))
+        print >> sys.stderr, "[%s] %s" % (self.NAME, (message % args))
 
     # ==========================================================================
     # Jugadas posibles
@@ -106,7 +105,7 @@ class Interface(object):
     def __init__(self, bot_class):
         self.bot_class = bot_class
         self.bot = None
-    
+
     def _recv(self):
         line = sys.stdin.readline()
         if not line:

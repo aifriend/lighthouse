@@ -1,4 +1,5 @@
-import pygame, sys, time, math
+import math
+import pygame
 
 CELL = 15
 
@@ -13,11 +14,12 @@ PLAYERC = [
     (255, 127, 127),
 ]
 
+
 class GameView(object):
     def __init__(self, game):
         self.game = game
         pygame.init()
-        size = width, height = 640, 480
+        size = width, height = 340, 280
         self.screen = pygame.display.set_mode(size)
         self.scale = 1
         self.fw = self.game.island.w * CELL * self.scale
@@ -38,7 +40,7 @@ class GameView(object):
         x1 *= self.scale
         y1 *= self.scale
         for i in xrange(self.scale):
-            pygame.draw.aaline(self.arena, c, (x0+i, y0+i), (x1+i, y1+i))
+            pygame.draw.aaline(self.arena, c, (x0 + i, y0 + i), (x1 + i, y1 + i))
 
     def _diamond(self, (cx, cy), size, c, width=0):
         cx *= self.scale
@@ -56,15 +58,15 @@ class GameView(object):
         return int(r * mul), int(g * mul), int(b * mul)
 
     def calpha(self, (r1, g1, b1), (r2, g2, b2), a):
-        return (int(r2 * a + r1 * (1-a)),
-                int(g2 * a + g1 * (1-a)),
-                int(b2 * a + b1 * (1-a)))
+        return (int(r2 * a + r1 * (1 - a)),
+                int(g2 * a + g1 * (1 - a)),
+                int(b2 * a + b1 * (1 - a)))
 
     def draw_cell(self, (cx, cy)):
         py = (self.nh - cy) * CELL
         px = cx * CELL
         c = int(self.game.island.energy[cx, cy] / 100.0 * 25)
-        bg = tuple(map(int,(25+c*0.8, 25+c*0.8, 25+c)))
+        bg = tuple(map(int, (25 + c * 0.8, 25 + c * 0.8, 25 + c)))
 
         for vertices, fill in self.game.tris.iteritems():
             if (cx, cy) in fill:
@@ -72,14 +74,14 @@ class GameView(object):
                 bg = self.calpha(bg, PLAYERC[owner], 0.15)
 
         self._afill((px, py), (CELL, CELL), bg)
-        self._afill((px + CELL/2, py + CELL/2), (1,1), (255,255,255))
+        self._afill((px + CELL / 2, py + CELL / 2), (1, 1), (255, 255, 255))
 
         cplayers = [i for i in self.game.players if i.pos == (cx, cy)]
         if cplayers:
             nx = int(math.ceil(math.sqrt(len(cplayers))))
             wx = 12 / nx
-            ny = int(math.ceil(len(cplayers)/float(nx)))
-            wy = 12 / ny 
+            ny = int(math.ceil(len(cplayers) / float(nx)))
+            wy = 12 / ny
             for i, player in enumerate(cplayers):
                 iy = i / nx
                 ix = i % nx
@@ -92,7 +94,7 @@ class GameView(object):
             color = (192, 192, 192)
             if lh.owner is not None:
                 color = PLAYERC[lh.owner]
-            self._diamond((px + CELL/2, py + CELL/2), 4, color, 0)
+            self._diamond((px + CELL / 2, py + CELL / 2), 4, color, 0)
 
     def update(self):
         self.arena.fill((0, 0, 0))
@@ -104,9 +106,9 @@ class GameView(object):
             owner = self.game.lighthouses[x0, y0].owner
             color = PLAYERC[owner]
             y0, y1 = self.nh - y0, self.nh - y1
-            self._aaline((x0 * CELL + CELL/2, y0 * CELL + CELL/2),
-                        (x1 * CELL + CELL/2, y1 * CELL + CELL/2), color)
-        self.screen.blit(self.arena, (0,0))
+            self._aaline((x0 * CELL + CELL / 2, y0 * CELL + CELL / 2),
+                         (x1 * CELL + CELL / 2, y1 * CELL + CELL / 2), color)
+        self.screen.blit(self.arena, (0, 0))
         pygame.display.flip()
 
     def closeEvent(self):

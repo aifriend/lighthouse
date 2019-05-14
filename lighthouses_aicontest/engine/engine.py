@@ -1,16 +1,21 @@
 #!/usr/bin/python
 
-import geom, math
+import geom
+import math
+
 
 class MoveError(Exception):
     pass
 
+
 class GameError(Exception):
     pass
+
 
 class Island(object):
     MAX_ENERGY = 100
     HORIZON = 3
+
     def __init__(self, island_map):
         self._island = island_map
         self.h = len(self._island)
@@ -21,7 +26,7 @@ class Island(object):
         for y in xrange(-dist, dist + 1):
             row = []
             for x in xrange(-dist, dist + 1):
-                row.append(geom.dist((0,0), (x,y)) <= self.HORIZON)
+                row.append(geom.dist((0, 0), (x, y)) <= self.HORIZON)
             self._horizonmap.append(row)
 
         class _Energy(object):
@@ -31,6 +36,7 @@ class Island(object):
                     return self._energymap[y][x]
                 else:
                     return 0
+
             def __setitem__(unused, pos, val):
                 x, y = pos
                 if val > self.MAX_ENERGY:
@@ -38,6 +44,7 @@ class Island(object):
                 assert val >= 0
                 if self[pos]:
                     self._energymap[y][x] = val
+
         self._energy = _Energy()
 
     def __getitem__(self, pos):
@@ -58,8 +65,8 @@ class Island(object):
         for y in xrange(-dist, dist + 1):
             row = []
             for x in xrange(-dist, dist + 1):
-                if self._horizonmap[y+dist][x+dist]:
-                    row.append(self.energy[px+x, py+y])
+                if self._horizonmap[y + dist][x + dist]:
+                    row.append(self.energy[px + x, py + y])
                 else:
                     row.append(-1)
             view.append(row)
@@ -68,6 +75,7 @@ class Island(object):
     @property
     def map(self):
         return self._island
+
 
 class Lighthouse(object):
     def __init__(self, game, pos):
@@ -100,6 +108,7 @@ class Lighthouse(object):
             self.game.conns = set(i for i in self.game.conns if self.pos not in i)
             self.game.tris = dict(i for i in self.game.tris.iteritems() if self.pos not in i[0])
 
+
 class Player(object):
     def __init__(self, game, num, init_pos):
         self.num = num
@@ -119,6 +128,7 @@ class Player(object):
             raise MoveError("Target pos is not in island")
         self.pos = new_pos
 
+
 class GameConfig(object):
     def __init__(self, mapfile):
         with open(mapfile, "r") as fd:
@@ -133,12 +143,12 @@ class GameConfig(object):
                     row.append(0)
                 elif c == "!":
                     row.append(1)
-                    self.lighthouses.append((x,y))
+                    self.lighthouses.append((x, y))
                 elif c == " ":
                     row.append(1)
                 else:
                     row.append(1)
-                    players.append((c, (x,y)))
+                    players.append((c, (x, y)))
             self.island.append(row)
         self.players = [pos for c, pos in sorted(players)]
         w = len(self.island[0])
@@ -146,12 +156,14 @@ class GameConfig(object):
         if not all(len(l) == w for l in self.island):
             raise GameError("All map rows must have the same width")
         if (not all(not i for i in self.island[0]) or
-            not all(not i for i in self.island[-1]) or
-            not all(not (i[0] or i[-1]) for i in self.island)):
+                not all(not i for i in self.island[-1]) or
+                not all(not (i[0] or i[-1]) for i in self.island)):
             raise GameError("Map border must not be part of island")
+
 
 class Game(object):
     RDIST = 5
+
     def __init__(self, cfg, numplayers=None):
         if numplayers is None:
             numplayers = len(cfg.players)
@@ -183,8 +195,8 @@ class Game(object):
         y0, y1 = sorted((orig.pos[1], dest.pos[1]))
         for lh in self.lighthouses:
             if (x0 <= lh[0] <= x1 and y0 <= lh[1] <= y1 and
-                lh not in (orig.pos, dest.pos) and
-                geom.colinear(orig.pos, dest.pos, lh)):
+                    lh not in (orig.pos, dest.pos) and
+                    geom.colinear(orig.pos, dest.pos, lh)):
                 raise MoveError("Connection cannot intersect a lighthouse")
         new_tris = set()
         for c in self.conns:
@@ -202,12 +214,12 @@ class Game(object):
 
     def pre_round(self):
         for pos in self.lighthouses:
-            for y in xrange(pos[1]-self.RDIST+1, pos[1]+self.RDIST):
-                for x in xrange(pos[0]-self.RDIST+1, pos[0]+self.RDIST):
-                    dist = geom.dist(pos, (x,y))
+            for y in xrange(pos[1] - self.RDIST + 1, pos[1] + self.RDIST):
+                for x in xrange(pos[0] - self.RDIST + 1, pos[0] + self.RDIST):
+                    dist = geom.dist(pos, (x, y))
                     delta = int(math.floor(self.RDIST - dist))
                     if delta > 0:
-                        self.island.energy[x,y] += delta
+                        self.island.energy[x, y] += delta
         player_posmap = dict()
         for player in self.players:
             if player.pos in player_posmap:

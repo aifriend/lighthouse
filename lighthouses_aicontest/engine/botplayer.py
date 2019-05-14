@@ -1,15 +1,23 @@
 #!/usr/bin/python
 
-import json, subprocess, time, select, sys
+import json
+import select
+import subprocess
+import sys
+import time
+
 import engine
+
 
 class CommError(Exception):
     pass
+
 
 class BotPlayer(object):
     INIT_TIMEOUT = 2.0
     MOVE_TIMEOUT = 0.1
     MOVE_HARDTIMEOUT = 0.5
+
     def __init__(self, game, playernum, cmdline, debug=False):
         self.alive = True
         self.p = subprocess.Popen(cmdline, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
@@ -35,7 +43,7 @@ class BotPlayer(object):
         line = ""
         try:
             while not line or line[-1] != "\n":
-                r,w,e = select.select([self.p.stdout],[],[],ht - time.time())
+                r, w, e = select.select([self.p.stdout], [], [], ht - time.time())
                 if self.p.stdout not in r:
                     raise CommError("Bot %r over hard timeout" % self.player.name)
                 line += self.p.stdout.read(1)
@@ -73,7 +81,7 @@ class BotPlayer(object):
         lighthouses = []
         for lh in self.game.lighthouses.itervalues():
             connections = [(l for l in c if l is not lh.pos).next()
-                            for c in self.game.conns if lh.pos in c]
+                           for c in self.game.conns if lh.pos in c]
             lighthouses.append({
                 "position": lh.pos,
                 "owner": lh.owner,
@@ -117,7 +125,7 @@ class BotPlayer(object):
                 raise engine.MoveError("Invalid command %r" % move["command"])
             self._send({"success": True})
         except engine.MoveError as e:
-            #sys.stderr.write("Bot %r move error: %s\n" % (self.player.name, e.message))
+            # sys.stderr.write("Bot %r move error: %s\n" % (self.player.name, e.message))
             self._send({"success": False, "message": e.message})
 
     def close(self):

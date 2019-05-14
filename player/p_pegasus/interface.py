@@ -13,7 +13,7 @@ class Interface(object):
     def __init__(self, bot_class):
         self.bot_class = bot_class
         self.bot = None
-    
+
     def _recv(self):
         line = sys.stdin.readline()
         if not line:
@@ -37,4 +37,3 @@ class Interface(object):
                 self.bot.success()
             else:
                 self.bot.error(status["message"], move)
-

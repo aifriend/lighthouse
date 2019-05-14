@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import random
-from interface import Interface
+
 from bot import Bot
+from interface import Interface
 from utils import Utils
 
 
@@ -169,7 +170,7 @@ class Pegasus(Bot):
         # Check possible movements
         cx, cy = pos
 
-        moves = [(x, y) for x, y in moves if self.map[cy+y][cx+x]]
+        moves = [(x, y) for x, y in moves if self.map[cy + y][cx + x]]
         return moves
 
     def _decide_dest_lh(self, state, lh_states):
@@ -243,8 +244,8 @@ class Pegasus(Bot):
                 return move
         dest_lh = self._decide_dest_lh(state, lh_states)
         move = self._to_lh_movement(dest_lh,
-                                     state["position"],
-                                     possible_moves)
+                                    state["position"],
+                                    possible_moves)
 
         self.log("MOVE TO LH: %s", str(move))
         return move
