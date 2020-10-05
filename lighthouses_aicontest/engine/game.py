@@ -1,9 +1,8 @@
 #!/usr/bin/python
 
-import sys
-
 import botplayer
 import engine
+import sys
 import view
 
 cfg_file = sys.argv[1]

@@ -1,9 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import random
-
 import interface
+import random
 
 
 class RandBot(interface.Bot):

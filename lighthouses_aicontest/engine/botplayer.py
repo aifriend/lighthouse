@@ -1,12 +1,11 @@
 #!/usr/bin/python
 
+import engine
 import json
 import select
 import subprocess
 import sys
 import time
-
-import engine
 
 
 class CommError(Exception):
